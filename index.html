@@ -17,15 +17,16 @@
   <link rel="apple-touch-icon" href="https://www.radiofrance.fr/dist/favicons/logo-57.png">
   <link rel="apple-touch-icon" sizes="72x72" href="https://www.radiofrance.fr/dist/favicons/logo-72.png">
   <link rel="apple-touch-icon" sizes="114x114" href="https://www.radiofrance.fr/dist/favicons/logo-114.png">
-    
+
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+    rel="stylesheet">
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 
   <style>
-    
     body {
       text-align: center;
       color: #353535;
@@ -75,35 +76,42 @@
     .stationbutton {
       border: 1px solid;
       border-radius: 28px;
-      padding: 8px;
       display: inline-block;
       background-color: #B4B4B4;
       color: #353535;
       margin: 6px 4px;
       cursor: pointer;
+
+      padding: 6px 8px;
+      font-size: 16px;
+      font-weight: 500;
     }
 
     .fip {
       background-color: #e2007a;
       color: #ffffff;
     }
+
     .francemusique {
       background-color: #a90042;
       color: #ffffff;
     }
+
     .franceinter {
       background-color: #e20134;
       color: #ffffff;
     }
+
     .franceinfo {
       background-color: #ffc300;
       color: #181b1f;
     }
+
     .franceculture {
       background-color: #722a80;
       color: #ffffff;
     }
-    
+
     .stationbutton:hover,
     .stationbutton:focus,
     .currently-playing {
@@ -189,12 +197,11 @@
       vertical-align: middle;
     }
 
-    .unmuted
-    {
+    .unmuted {
       background-image: url("https://www.francetvinfo.fr/skin/dist/www/img/player-franceinfo/mute-2a46b895c3.png");
     }
-    .muted
-    {
+
+    .muted {
       background-image: url("https://www.francetvinfo.fr/skin/dist/www/img/player-franceinfo/unmute-8bfc2f00ea.png");
     }
 
@@ -226,9 +233,11 @@
     #cast.connecting0 {
       background-image: url("https://bertrand.famille-gorge.org/fip/images/ic_media_route_on_0_custom.png");
     }
+
     #cast.connecting1 {
       background-image: url("https://bertrand.famille-gorge.org/fip/images/ic_media_route_on_1_custom.png");
     }
+
     #cast.connecting2 {
       background-image: url("https://bertrand.famille-gorge.org/fip/images/ic_media_route_on_2_custom.png");
     }
@@ -279,47 +288,21 @@
         color: #969696;
       }
 
+      .liste-radios {
+        margin-bottom: 10px;
+        
+      }
     }
   </style>
 </head>
 
 <body>
-  <div>
-    <a id="button_fip" class="stationbutton fip" onclick="return changeRadio('fip');">Fip</a>
-    <a id="button_fiprock" class="stationbutton fip" onclick="return changeRadio('fiprock');">Rock</a>
-    <a id="button_fipjazz" class="stationbutton fip" onclick="return changeRadio('fipjazz');">Jazz</a>
-    <a id="button_fipgroove" class="stationbutton fip" onclick="return changeRadio('fipgroove');">Groove</a>
-    <a id="button_fippop" class="stationbutton fip" onclick="return changeRadio('fippop');">Pop</a>
-    <a id="button_fipelectro" class="stationbutton fip" onclick="return changeRadio('fipelectro');">Electro</a>
-    <a id="button_fipworld" class="stationbutton fip" onclick="return changeRadio('fipworld');">Monde</a>
-    <a id="button_fipreggae" class="stationbutton fip" onclick="return changeRadio('fipreggae');">Reggae</a>
-    <a id="button_fipnouveautes" class="stationbutton fip" onclick="return changeRadio('fipnouveautes');">Nouveautés</a>
-    <a id="button_fipmetal" class="stationbutton fip" onclick="return changeRadio('fipmetal');">Métal</a>
-    <a id="button_fiphiphop" class="stationbutton fip" onclick="return changeRadio('fiphiphop');">Hip-Hop</a>
-    <a id="button_fipsacrefrancais" class="stationbutton fip" onclick="return changeRadio('fipsacrefrancais');">Sacré
-      Français</a>
-  </div>
-  <br />
-  <div>
-    <a id="button_francemusique" class="stationbutton francemusique" onclick="return changeRadio('francemusique');">France Musique</a>
-    <a id="button_francemusiqueeasyclassique" class="stationbutton francemusique" onclick="return changeRadio('francemusiqueeasyclassique');">Classique Easy</a>
-    <a id="button_francemusiquepianozen" class="stationbutton francemusique" onclick="return changeRadio('francemusiquepianozen');">Piano Zen</a>
-    <a id="button_francemusiquebaroque" class="stationbutton francemusique" onclick="return changeRadio('francemusiquebaroque');">Baroque</a>
-    <a id="button_francemusiqueclassiqueplus" class="stationbutton francemusique" onclick="return changeRadio('francemusiqueclassiqueplus');">Classique Plus</a>
-    <a id="button_francemusiqueconcertsradiofrance" class="stationbutton francemusique" onclick="return changeRadio('francemusiqueconcertsradiofrance');">Concerts Radio France</a>
-    <a id="button_francemusiquelajazz" class="stationbutton francemusique" onclick="return changeRadio('francemusiquelajazz');">Jazz</a>
-    <a id="button_francemusiquelacontemporaine" class="stationbutton francemusique" onclick="return changeRadio('francemusiquelacontemporaine');">Contemporaine</a>
-    <a id="button_francemusiqueocoramonde" class="stationbutton francemusique" onclick="return changeRadio('francemusiqueocoramonde');">Ocora Musiques du Monde</a>
-    <a id="button_francemusiquelabo" class="stationbutton francemusique" onclick="return changeRadio('francemusiquelabo');">B.O. Musiques de Films</a>
-    <a id="button_francemusiqueopera" class="stationbutton francemusique" onclick="return changeRadio('francemusiqueopera');">Opéra</a>
-  </div>
-  <br />
-  <div>
-    <a id="button_franceinter" class="stationbutton franceinter" onclick="return changeRadio('franceinter');">France Inter</a>
-    <a id="button_franceinfo" class="stationbutton franceinfo" onclick="return changeRadio('franceinfo');">France Info</a>
-    <a id="button_franceculture" class="stationbutton franceculture" onclick="return changeRadio('franceculture');">France Culture</a>    
-  </div>
-  <br />
+  <div id="FipDiv" class="liste-radios"></div>
+
+  <div id="FranceMusiqueDiv" class="liste-radios"></div>
+
+  <div id="FranceInterDiv" class="liste-radios"></div>
+
   <div onclick="return startTitleInterval(4, true);">
     <h3 id="titl2"> </h3>
     <p><span id="song_title"></span></p>
@@ -347,6 +330,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/castjs/5.2.0/cast.min.js"></script>
 <script>
 
+
   let playingLocal = true; // false for cast
   let radiocode = 'fip';
   let chromecastState = 0;
@@ -359,34 +343,34 @@
   var hls;
   const radios = new Map();
 
-  radios.set('fip', { 'display': "FIP (national)", 'apiId': "FIP" });
-  radios.set('fiprock', { 'display': "FIP Rock", 'apiId': "FIP_ROCK" });
-  radios.set('fipjazz', { 'display': "FIP Jazz", 'apiId': "FIP_JAZZ" });
-  radios.set('fipgroove', { 'display': "FIP Groove", 'apiId': "FIP_GROOVE" });
-  radios.set('fippop', { 'display': "FIP Pop", 'apiId': "FIP_POP" });
-  radios.set('fipelectro', { 'display': "FIP Electro", 'apiId': "FIP_ELECTRO" });
-  radios.set('fipworld', { 'display': "FIP Monde", 'apiId': "FIP_WORLD" });
-  radios.set('fipreggae', { 'display': "FIP Reggae", 'apiId': "FIP_REGGAE" });
-  radios.set('fipnouveautes', { 'display': "FIP Nouveautés", 'apiId': "FIP_NOUVEAUTES" });
-  radios.set('fipmetal', { 'display': "FIP Métal", 'apiId': "FIP_METAL" });
-  radios.set('fiphiphop', { 'display': "FIP Hip-Hop", 'apiId': "FIP_HIP_HOP" });
-  radios.set('fipsacrefrancais', { 'display': "FIP Sacré français", 'apiId': "FIP_SACRE_FRANCAIS" });
+  radios.set('fip', { 'display': "FIP", 'apiId': "FIP", class: "fip" });
+  radios.set('fiprock', { 'display': "Rock", 'apiId': "FIP_ROCK", class: "fip" });
+  radios.set('fipjazz', { 'display': "Jazz", 'apiId': "FIP_JAZZ", class: "fip" });
+  radios.set('fipgroove', { 'display': "Groove", 'apiId': "FIP_GROOVE", class: "fip" });
+  radios.set('fippop', { 'display': "Pop", 'apiId': "FIP_POP", class: "fip" });
+  radios.set('fipelectro', { 'display': "Electro", 'apiId': "FIP_ELECTRO", class: "fip" });
+  radios.set('fipworld', { 'display': "Monde", 'apiId': "FIP_WORLD", class: "fip" });
+  radios.set('fipreggae', { 'display': "Reggae", 'apiId': "FIP_REGGAE", class: "fip" });
+  radios.set('fipnouveautes', { 'display': "Nouveautés", 'apiId': "FIP_NOUVEAUTES", class: "fip" });
+  radios.set('fipmetal', { 'display': "Métal", 'apiId': "FIP_METAL", class: "fip" });
+  radios.set('fiphiphop', { 'display': "Hip-Hop", 'apiId': "FIP_HIP_HOP", class: "fip" });
+  radios.set('fipsacrefrancais', { 'display': "Sacré français", 'apiId': "FIP_SACRE_FRANCAIS", class: "fip" });
 
-  radios.set('francemusique', { 'display': "France Musique", 'apiId': "FRANCEMUSIQUE" });
-  radios.set('francemusiqueeasyclassique', { 'display': "France Musique Classique Easy", 'apiId': "FRANCEMUSIQUE_CLASSIQUE_EASY" });
-  radios.set('francemusiquepianozen', { 'display': "France Musique Piano Zen", 'apiId': "FRANCEMUSIQUE_PIANO_ZEN" });
-  radios.set('francemusiquebaroque', { 'display': "France Musique la Baroque", 'apiId': "FRANCEMUSIQUE_LA_BAROQUE" });
-  radios.set('francemusiqueclassiqueplus', { 'display': "France Musique Classique Plus", 'apiId': "FRANCEMUSIQUE_CLASSIQUE_PLUS" });
-  radios.set('francemusiqueconcertsradiofrance', { 'display': "France Musique Concerts Radio France", 'apiId': "FRANCEMUSIQUE_CONCERT_RF" });
-  radios.set('francemusiquelajazz', { 'display': "France Musique la Jazz", 'apiId': "FRANCEMUSIQUE_LA_JAZZ" });
-  radios.set('francemusiquelacontemporaine', { 'display': "France Musique la Contemporaine", 'apiId': "FRANCEMUSIQUE_LA_CONTEMPORAINE" });
-  radios.set('francemusiqueocoramonde', { 'display': "France Musique Ocora Musiques du Monde", 'apiId': "FRANCEMUSIQUE_OCORA_MONDE" });
-  radios.set('francemusiquelabo', { 'display': "France Musique la B.O. Musiques de Films", 'apiId': "FRANCEMUSIQUE_LA_BO" });
-  radios.set('francemusiqueopera', { 'display': "France Musique Opéra", 'apiId': "FRANCEMUSIQUE_OPERA" });
+  radios.set('francemusique', { 'display': "France Musique", 'apiId': "FRANCEMUSIQUE", class: "francemusique" });
+  radios.set('francemusiqueeasyclassique', { 'display': "Classique Easy", 'apiId': "FRANCEMUSIQUE_CLASSIQUE_EASY", class: "francemusique" });
+  radios.set('francemusiquepianozen', { 'display': "Piano Zen", 'apiId': "FRANCEMUSIQUE_PIANO_ZEN", class: "francemusique" });
+  radios.set('francemusiquebaroque', { 'display': "Baroque", 'apiId': "FRANCEMUSIQUE_LA_BAROQUE", class: "francemusique" });
+  radios.set('francemusiqueclassiqueplus', { 'display': "Classique Plus", 'apiId': "FRANCEMUSIQUE_CLASSIQUE_PLUS", class: "francemusique" });
+  radios.set('francemusiqueconcertsradiofrance', { 'display': "Concerts Radio France", 'apiId': "FRANCEMUSIQUE_CONCERT_RF", class: "francemusique" });
+  radios.set('francemusiquelajazz', { 'display': "Jazz", 'apiId': "FRANCEMUSIQUE_LA_JAZZ", class: "francemusique" });
+  radios.set('francemusiquelacontemporaine', { 'display': "Contemporaine", 'apiId': "FRANCEMUSIQUE_LA_CONTEMPORAINE", class: "francemusique" });
+  radios.set('francemusiqueocoramonde', { 'display': "Musiques du Monde", 'apiId': "FRANCEMUSIQUE_OCORA_MONDE", class: "francemusique" });
+  radios.set('francemusiquelabo', { 'display': "Musiques de Films", 'apiId': "FRANCEMUSIQUE_LA_BO", class: "francemusique" });
+  radios.set('francemusiqueopera', { 'display': "Opéra", 'apiId': "FRANCEMUSIQUE_OPERA", class: "francemusique" });
 
-  radios.set('franceinter', { 'display': "France Inter", 'apiId': "FRANCEINTER" });
-  radios.set('franceinfo', { 'display': "France Info", 'apiId': "FRANCEINFO" });
-  radios.set('franceculture', { 'display': "France Culture", 'apiId': "FRANCECULTURE" });
+  radios.set('franceinter', { 'display': "France Inter", 'apiId': "FRANCEINTER", class: "franceinter" });
+  radios.set('franceinfo', { 'display': "France Info", 'apiId': "FRANCEINFO", class: "franceinfo" });
+  radios.set('franceculture', { 'display': "France Culture", 'apiId': "FRANCECULTURE", class: "franceculture" });
 
   function changeRadio(newRadioCode) {
     $("#button_" + radiocode).removeClass("currently-playing");
@@ -400,8 +384,7 @@
     return false;
   }
 
-  function playMusic()
-  {
+  function playMusic() {
     if (playingLocal)
       playLocalMusic();
     else
@@ -426,36 +409,32 @@
     }
 
     player.play()
-//    document.getElementById("cont").style.display = "inline-block";
+    //    document.getElementById("cont").style.display = "inline-block";
 
     showPauseButton();
     vol();
   }
 
-  function playChromecastMusic()
-  {
-      if (radiocode == '')
-        return;
+  function playChromecastMusic() {
+    if (radiocode == '')
+      return;
 
-      var source = "https://icecast.radiofrance.fr/" + radiocode + "-hifi.aac";
+    var source = "https://icecast.radiofrance.fr/" + radiocode + "-hifi.aac";
 
-      console.log("Casting : " + source);
-      cjs.cast(source, {title: radios.get(radiocode).display});
+    console.log("Casting : " + source);
+    cjs.cast(source, { title: radios.get(radiocode).display });
 
-      startUpdatingStatus();
+    startUpdatingStatus();
   }
 
-  function updateChromecastStatus()
-  {
+  function updateChromecastStatus() {
     $("#castStatus").text(cjs.state);
 
-    if (cjs.state == "playing")
-    {
+    if (cjs.state == "playing") {
       setCastIconStatus('playing');
       stopUpdatingStatus();
     }
-    else if (cjs.state == "ended")
-    {
+    else if (cjs.state == "ended") {
       setCastIconStatus('disabled');
       stopUpdatingStatus();
     }
@@ -463,14 +442,12 @@
       setCastIconStatus('connecting' + (chromecastState++ % 3));
   }
 
-  function startUpdatingStatus()
-  {
+  function startUpdatingStatus() {
     if (chromecastStateInterval == null)
       chromecastStateInterval = setInterval(updateChromecastStatus, 500);
   }
 
-  function stopUpdatingStatus()
-  {
+  function stopUpdatingStatus() {
     clearInterval(chromecastStateInterval);
     chromecastStateInterval = null;
     $("#castStatus").text("");
@@ -494,17 +471,14 @@
     playdiv.style.display = "block";
   }
 
-  function toggleMusic()
-  {
-    if (playingLocal)
-    {
+  function toggleMusic() {
+    if (playingLocal) {
       if (isLocalMusicPlaying())
         stopLocalMusic();
       else
         startLocalMusic();
     }
-    else
-    {
+    else {
       if (isChromecastPlaying())
         pauseChromecastMusic();
       else
@@ -518,8 +492,7 @@
     return isPlaying;
   }
 
-  function isChromecastPlaying()
-  {
+  function isChromecastPlaying() {
     console.log("Chromecast status : " + cjs.state);
 
     switch (cjs.state) {
@@ -531,9 +504,8 @@
     return false;
   }
 
-  function isMusicPlaying()
-  {
-    if(playingLocal)
+  function isMusicPlaying() {
+    if (playingLocal)
       return isLocalMusicPlaying();
     else
       return isChromecastPlaying();
@@ -555,13 +527,11 @@
   }
 
   function muteClick() {
-    if (playingLocal)
-    {
+    if (playingLocal) {
       var player = document.getElementById("lecteur");
       player.muted = !player.muted;
     }
-    else
-    {
+    else {
       if (cjs.muted == true) {
         cjs.unmute();
       } else {
@@ -571,24 +541,21 @@
     updateMuteButton();
   }
 
-  function updateMuteButton()
-  {
-    if (playingLocal)
-    {
+  function updateMuteButton() {
+    if (playingLocal) {
       var player = document.getElementById("lecteur");
 
       if (player.muted == true || document.getElementById("son").value == 0) {
-        $("#mut").removeClass( "unmuted" ).addClass( "muted" );
+        $("#mut").removeClass("unmuted").addClass("muted");
       } else {
-        $("#mut").removeClass( "muted" ).addClass( "unmuted" );
+        $("#mut").removeClass("muted").addClass("unmuted");
       }
     }
-    else
-    {
+    else {
       if (cjs.muted == true || cjs.volumeLevel == 0) {
-        $("#mut").removeClass( "unmuted" ).addClass( "muted" );
+        $("#mut").removeClass("unmuted").addClass("muted");
       } else {
-        $("#mut").removeClass( "muted" ).addClass( "unmuted" );
+        $("#mut").removeClass("muted").addClass("unmuted");
       }
     }
   }
@@ -604,10 +571,8 @@
     }
   }
 
-  function setPlayerVolume(newVol = 1)
-  {
-    if (playingLocal)
-    {
+  function setPlayerVolume(newVol = 1) {
+    if (playingLocal) {
       var player = document.getElementById("lecteur");
       player.volume = newVol;
     }
@@ -615,20 +580,18 @@
       cjs.volume(newVol);
   }
 
-  function startTitleInterval(time, bForce = false)
-  {
+  function startTitleInterval(time, bForce = false) {
     if (bForce)
       clearTitleInterval();
     else if (titleInterval)
       return;
-    
+
     titleInterval = setTimeout(getCurrentTitle, time * 1000);
 
     // $("#debugspan").html(titleInterval);
   }
 
-  function clearTitleInterval()
-  {
+  function clearTitleInterval() {
     clearInterval(titleInterval);
     titleInterval = null;
     // $("#debugspan").html("");
@@ -637,8 +600,7 @@
   function getCurrentTitle() {
     titleInterval = null;
 
-    if (!isMusicPlaying())
-    {
+    if (!isMusicPlaying()) {
       // Not playing anything
       return;
     }
@@ -682,9 +644,9 @@
       success: function (result) {
         if (result.data.live.song != null) {
           setMetadata(result.data.live.song.track.title,
-                      result.data.live.song.track.mainArtists + " " + result.data.live.song.track.composers.join(", "),
-                      result.data.live.song.track.albumTitle,
-                      result.data.live.song.track.productionDate);
+            result.data.live.song.track.mainArtists + " " + result.data.live.song.track.composers.join(", "),
+            result.data.live.song.track.albumTitle,
+            result.data.live.song.track.productionDate);
 
           startTitleInterval(30);
         }
@@ -694,8 +656,7 @@
     });
   }
 
-  function showRadioName()
-  {
+  function showRadioName() {
     let radioName = radios.get(radiocode).display;
     setMetadata(radioName, "", "", "");
     startTitleInterval(4, true);
@@ -771,38 +732,33 @@
     }
   }
 
-  function setCastIconStatus(newStatus)
-  {
-    $("#cast").removeClass( "connecting1 connecting2 connecting3 playing enabled disabled" ).addClass( newStatus );
+  function setCastIconStatus(newStatus) {
+    $("#cast").removeClass("connecting1 connecting2 connecting3 playing enabled disabled").addClass(newStatus);
   }
 
-  function pauseChromecastMusic()
-  {
+  function pauseChromecastMusic() {
     cjs.pause();
     clearTitleInterval();
   }
 
-  function startChromecastMusic()
-  {
+  function startChromecastMusic() {
     cjs.play();
     startTitleInterval(30);
   }
 
-  function setupChromecast()
-  {
-    $("#cast").on( "click", function() {
+  function setupChromecast() {
+    $("#cast").on("click", function () {
 
       if (!cjs.available)
         return;
 
-      if (isChromecastPlaying())
-      {
-          playingLocal = true;
-          showPlayButton();
-          cjs.disconnect();
-          stopUpdatingStatus();
+      if (isChromecastPlaying()) {
+        playingLocal = true;
+        showPlayButton();
+        cjs.disconnect();
+        stopUpdatingStatus();
 
-          return;
+        return;
       }
 
       playingLocal = false;
@@ -858,17 +814,17 @@
       console.log(e);
     });  // Catch any errors
 
-    cjs.on('connect',      ()  => {
+    cjs.on('connect', () => {
       console.log('connect');
       startUpdatingStatus();
     });  // Connected with device
 
-    cjs.on('statechange',  ()  => {
+    cjs.on('statechange', () => {
       console.log('statechange');
       startUpdatingStatus();
     });  // Device state
 
-    cjs.on('buffering',    ()  => {
+    cjs.on('buffering', () => {
       console.log('buffering');
       startUpdatingStatus();
     });  // Media is buffering / seeking
@@ -903,7 +859,29 @@
     toggleMusic();
   });
 
+  window.onload = function () {
+    // Add the buttons
+    var fipDiv = document.getElementById("FipDiv");
+    var francemusiqueDiv = document.getElementById("FranceMusiqueDiv");
+    var franceinterDiv = document.getElementById("FranceInterDiv");
 
+    radios.forEach((value, key) => {
+      var button = document.createElement("a");
+      button.id = "button_" + key;
+      button.className = "stationbutton " + value.class;
+      button.onclick = function () { return changeRadio(key); };
+      button.innerHTML = value.display;
+
+      if (value.class == "fip") {
+        fipDiv.appendChild(button);
+      } else if (value.class == "francemusique") {
+        francemusiqueDiv.appendChild(button);
+      } else {
+        franceinterDiv.appendChild(button);
+      }
+    });
+
+  };
 </script>
 
 </html>

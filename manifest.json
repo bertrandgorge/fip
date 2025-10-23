@@ -1,0 +1,15 @@
+{
+  "name": "Radio France - Replay & direct",
+  "short_name": "Radio France",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#005DCB",
+  "background_color": "#E1E1E1",
+  "icons": [
+    {
+      "src": "https://www.radiofrance.fr/dist/favicons/radiofrance/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

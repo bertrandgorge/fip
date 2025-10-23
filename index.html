@@ -11,15 +11,15 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="description" content="Ecouter le direct ou le replay, à l'heure de votre choix, de toutes les antennes de Radio France">
+  <meta name="description" content="Ecouter Fip légèrement !">
   <meta name="keywords" content="replay, radio, Radio France, direct">
   <meta name="author" content="Bertrand Gorge">
   <meta name="theme-color" content="#005DCB">
   <meta name="color-scheme" content="light dark">
 
   <link rel="icon" type="image/png" href="https://www.radiofrance.fr/dist/favicons/radiofrance/favicon.png">
-  <link rel="apple-touch-icon" sizes="57x57"   href="https://www.radiofrance.fr/dist/favicons/logo-57.png">
-  <link rel="apple-touch-icon" sizes="72x72"   href="https://www.radiofrance.fr/dist/favicons/logo-72.png">
+  <link rel="apple-touch-icon" sizes="57x57" href="https://www.radiofrance.fr/dist/favicons/logo-57.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="https://www.radiofrance.fr/dist/favicons/logo-72.png">
   <link rel="apple-touch-icon" sizes="114x114" href="https://www.radiofrance.fr/dist/favicons/logo-114.png">
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,10 +27,8 @@
     href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
     rel="stylesheet">
 
-  <script
-    src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
   <style>
     body {
@@ -227,41 +225,16 @@
       color: #545454;
     }
 
-    #cast {
-      width: 32px;
-      height: 32px;
+    google-cast-launcher {
       display: inline-block;
-      top: 9px;
       position: relative;
-      background-image: url("images/ic_media_route_disabled_custom.png");
+      width: 31px;
+      top: 11px;
     }
 
-    #cast.connecting0 {
-      background-image: url("images/ic_media_route_on_0_custom.png");
-    }
-
-    #cast.connecting1 {
-      background-image: url("images/ic_media_route_on_1_custom.png");
-    }
-
-    #cast.connecting2 {
-      background-image: url("images/ic_media_route_on_2_custom.png");
-    }
-
-    #cast.playing {
-      background-image: url("images/ic_media_route_on_custom.png");
-    }
-
-    #cast.enabled {
-      background-image: url("images/ic_media_route_off_custom.png");
-    }
-
-    #cast.disabled {
-      background-image: url("images/ic_media_route_disabled_custom.png");
-    }
-
-    #cast:before {
-      cursor: pointer;
+    google-cast-launcher:hover {
+      --disconnected-color: white;
+      --connected-color: white;
     }
 
     /* Dark theme */
@@ -296,7 +269,7 @@
 
       .liste-radios {
         margin-bottom: 10px;
-        
+
       }
     }
   </style>
@@ -325,7 +298,7 @@
     <button class="unmuted" onclick="muteClick()" id="mut"></button>
     <input type="range" min="0" max="100" step="1" class="vol" value="100" onclick="vol()" id="son">
 
-    <i id="cast"></i> <span id="castStatus"></span>
+    <google-cast-launcher></google-cast-launcher>
   </div>
 
   <footer style="text-align: right;margin-top: 10px;">
@@ -333,17 +306,32 @@
   </footer>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.6.13/dist/hls.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/castjs/5.2.0/cast.min.js"></script>
+<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
 <script>
 
-  let playingLocal = true; // false for cast
+  let playingLocal = true;
   let radiocode = 'fip';
-  let chromecastState = 0;
-  let chromecastStateInterval = null;
   let titleInterval = null;
+  let castInstance = null;
 
-  // Create new Castjs instance
-  const cjs = new Castjs(); // {receiver  : 'CC1AD845', joinpolicy: 'origin_scoped'});
+  // Initialize Google Cast
+  window['__onGCastApiAvailable'] = function (isAvailable) {
+    if (isAvailable) {
+      // Add a small delay to ensure cast.framework is fully loaded
+      setTimeout(() => {
+        if (typeof cast !== 'undefined' && cast.framework) {
+          cast.framework.CastContext.getInstance().setOptions({
+            receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+          });
+
+          castInstance = cast.framework.CastContext.getInstance();
+        } else {
+          console.error('Cast framework not available');
+        }
+      }, 100);
+    }
+  };
 
   var hls;
   const radios = new Map();
@@ -391,7 +379,9 @@
   }
 
   function playMusic() {
-    if (playingLocal)
+    var castSession = castInstance?.getCurrentSession();
+    
+    if (castSession == null)
       playLocalMusic();
     else
       playChromecastMusic();
@@ -428,35 +418,18 @@
     var source = "https://icecast.radiofrance.fr/" + radiocode + "-hifi.aac";
 
     console.log("Casting : " + source);
-    cjs.cast(source, { title: radios.get(radiocode).display });
 
-    startUpdatingStatus();
-  }
+    var castSession = castInstance.getCurrentSession();
 
-  function updateChromecastStatus() {
-    $("#castStatus").text(cjs.state);
-
-    if (cjs.state == "playing") {
-      setCastIconStatus('playing');
-      stopUpdatingStatus();
-    }
-    else if (cjs.state == "ended") {
-      setCastIconStatus('disabled');
-      stopUpdatingStatus();
-    }
-    else
-      setCastIconStatus('connecting' + (chromecastState++ % 3));
-  }
-
-  function startUpdatingStatus() {
-    if (chromecastStateInterval == null)
-      chromecastStateInterval = setInterval(updateChromecastStatus, 500);
-  }
-
-  function stopUpdatingStatus() {
-    clearInterval(chromecastStateInterval);
-    chromecastStateInterval = null;
-    $("#castStatus").text("");
+    var mediaInfo = new chrome.cast.media.MediaInfo(source, 'audio/aac');
+    var request = new chrome.cast.media.LoadRequest(mediaInfo);
+    castSession.loadMedia(request).then(
+      function() { 
+        console.log('Load succeed'); 
+      },
+      function(errorCode) { 
+        console.log('Error code: ' + errorCode); 
+      });
   }
 
   function showPlayButton() {
@@ -478,13 +451,17 @@
   }
 
   function toggleMusic() {
-    if (playingLocal) {
+    var castSession = castInstance?.getCurrentSession();
+    
+    if (castSession == null){
       if (isLocalMusicPlaying())
         stopLocalMusic();
       else
         startLocalMusic();
     }
     else {
+      stopLocalMusic();
+
       if (isChromecastPlaying())
         pauseChromecastMusic();
       else
@@ -499,15 +476,15 @@
   }
 
   function isChromecastPlaying() {
-    console.log("Chromecast status : " + cjs.state);
+    var castSession = castInstance?.getCurrentSession();
+    
+    if (castSession == null)
+      return false;
 
-    switch (cjs.state) {
-      case 'buffering':
-      case 'playing':
-        return true;
-    }
+      let mediaStatus = castSession.getMediaSession();
 
-    return false;
+      console.log("Chromecast player state: " + mediaStatus);
+      return mediaStatus != null && mediaStatus.playerState === chrome.cast.media.PlayerState.PLAYING;
   }
 
   function isMusicPlaying() {
@@ -533,22 +510,23 @@
   }
 
   function muteClick() {
-    if (playingLocal) {
+    var castSession = castInstance?.getCurrentSession();
+    
+    if (castSession == null) {
       var player = document.getElementById("lecteur");
       player.muted = !player.muted;
     }
     else {
-      if (cjs.muted == true) {
-        cjs.unmute();
-      } else {
-        cjs.mute();
-      }
+      castSession.setMute(!castSession.isMute());
     }
+
     updateMuteButton();
   }
 
   function updateMuteButton() {
-    if (playingLocal) {
+    var castSession = castInstance?.getCurrentSession();
+    
+    if (castSession == null) {
       var player = document.getElementById("lecteur");
 
       if (player.muted == true || document.getElementById("son").value == 0) {
@@ -558,7 +536,7 @@
       }
     }
     else {
-      if (cjs.muted == true || cjs.volumeLevel == 0) {
+      if (castSession.isMute() == true) {
         $("#mut").removeClass("unmuted").addClass("muted");
       } else {
         $("#mut").removeClass("muted").addClass("unmuted");
@@ -578,12 +556,15 @@
   }
 
   function setPlayerVolume(newVol = 1) {
-    if (playingLocal) {
+    var castSession = castInstance?.getCurrentSession();
+    
+    if (castSession == null) {
       var player = document.getElementById("lecteur");
       player.volume = newVol;
     }
-    else
-      cjs.volume(newVol);
+    else {
+      castSession.setVolume(newVol);
+    }
   }
 
   function startTitleInterval(time, bForce = false) {
@@ -743,105 +724,41 @@
   }
 
   function pauseChromecastMusic() {
-    cjs.pause();
+    var castSession = castInstance?.getCurrentSession();
+    
+    if (castSession == null)
+      return;
+    let mediaStatus = castSession.getMediaSession();
+    if (mediaStatus == null)
+      return;
+    mediaStatus.pause(null, function () {
+      console.log('Paused');
+    });
+    showPlayButton();
+
     clearTitleInterval();
   }
 
   function startChromecastMusic() {
-    cjs.play();
+    var castSession = castInstance?.getCurrentSession();
+    
+    if (castSession == null)
+      return;
+
+    let mediaStatus = castSession.getMediaSession();
+    if (mediaStatus == null) {
+      playChromecastMusic();
+      return;
+    }
+      
+    mediaStatus.play(null, function () {
+      console.log('Playing'); 
+    });
+
+    showPauseButton();
+
     startTitleInterval(30);
   }
-
-  function setupChromecast() {
-    $("#cast").on("click", function () {
-
-      if (!cjs.available)
-        return;
-
-      if (isChromecastPlaying()) {
-        playingLocal = true;
-        showPlayButton();
-        cjs.disconnect();
-        stopUpdatingStatus();
-
-        return;
-      }
-
-      playingLocal = false;
-      stopLocalMusic();
-      playChromecastMusic();
-    });
-
-    cjs.on('available', () => {
-      console.log('available');
-      setCastIconStatus('enabled');
-    });
-
-    cjs.on('playing', () => {
-      console.log('playing');
-      setCastIconStatus('playing');
-      showPauseButton();
-
-      var slider = document.getElementById("son");
-      slider.value = 100 * cjs.volumeLevel;
-    });
-
-    cjs.on('pause', () => {
-      console.log('pause');
-      showPlayButton();
-    });
-
-    cjs.on('disconnect', () => {
-      console.log('disconnect');
-      setCastIconStatus('enabled');
-      stopUpdatingStatus();
-    });
-
-    cjs.on('volumechange', () => {
-      console.log('volumechange');
-
-      var slider = document.getElementById("son");
-      slider.value = 100 * cjs.volumeLevel;
-    });
-
-    cjs.on('mute', () => {
-      console.log('mute');
-    });
-    cjs.on('unmute', () => {
-      console.log('unmute');
-    });
-
-    cjs.on('end', () => {
-      console.log('end');
-    });
-
-    cjs.on('error', (e) => {
-      console.log('error');
-      console.log(e);
-    });  // Catch any errors
-
-    cjs.on('connect', () => {
-      console.log('connect');
-      startUpdatingStatus();
-    });  // Connected with device
-
-    cjs.on('statechange', () => {
-      console.log('statechange');
-      startUpdatingStatus();
-    });  // Device state
-
-    cjs.on('buffering', () => {
-      console.log('buffering');
-      startUpdatingStatus();
-    });  // Media is buffering / seeking
-  }
-
-  changeRadio('fip');
-  getArguments();
-  showPlayButton();
-  setupChromecast();
-
-  startTitleInterval(30);
 
   navigator.mediaSession.setActionHandler('previoustrack', function () {
     let radioCodes = Array.from(radios.keys());
@@ -887,6 +804,11 @@
       }
     });
 
+    changeRadio('fip');
+    getArguments();
+    showPlayButton();
+
+    startTitleInterval(30);
   };
 </script>
 

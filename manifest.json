@@ -3,12 +3,27 @@
   "short_name": "Fip",
   "display": "standalone",
   "start_url": "./index.html",
-  "theme_color": "#005DCB",
-  "background_color": "#E1E1E1",
+  "theme_color": "#D1D1D1",
+  "background_color": "#005DCB",
   "icons": [
     {
       "src": "https://www.radiofrance.fr/dist/favicons/radiofrance/favicon.png",
-      "sizes": "192x192",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "https://www.radiofrance.fr/dist/favicons/logo-57.png",
+      "sizes": "57x57",
+      "type": "image/png"
+    },
+    {
+      "src": "https://www.radiofrance.fr/dist/favicons/logo-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "https://www.radiofrance.fr/dist/favicons/logo-114.png",
+      "sizes": "114x114",
       "type": "image/png"
     }
   ]

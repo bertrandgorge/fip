@@ -2,7 +2,7 @@
   "name": "Radio France - Replay & direct",
   "short_name": "Fip",
   "display": "standalone",
-  "start_url": "https://bertrandgorge.github.io/fip/",
+  "start_url": "./index.html",
   "theme_color": "#005DCB",
   "background_color": "#E1E1E1",
   "icons": [

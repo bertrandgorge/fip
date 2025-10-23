@@ -1,5 +1,5 @@
 {
-  "name": "Radio France - Replay & direct",
+  "name": "Fip",
   "short_name": "Fip",
   "display": "standalone",
   "start_url": "./index.html",

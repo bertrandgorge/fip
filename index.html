@@ -309,7 +309,6 @@
 <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
 <script>
 
-  let playingLocal = true;
   let radiocode = 'fip';
   let titleInterval = null;
   let castInstance = null;
@@ -488,7 +487,9 @@
   }
 
   function isMusicPlaying() {
-    if (playingLocal)
+    var castSession = castInstance?.getCurrentSession();
+    
+    if (castSession == null)
       return isLocalMusicPlaying();
     else
       return isChromecastPlaying();
@@ -808,6 +809,11 @@
     getArguments();
     showPlayButton();
 
+    setTimeout(() => {
+      if (isMusicPlaying())
+        showPauseButton();
+    }, 1000);
+    
     startTitleInterval(30);
   };
 </script>

@@ -14,7 +14,7 @@
   <meta name="description" content="Ecouter Fip légèrement !">
   <meta name="keywords" content="replay, radio, Radio France, direct">
   <meta name="author" content="Bertrand Gorge">
-  <meta name="theme-color" content="#005DCB">
+  <meta name="theme-color" content="#353535">
   <meta name="color-scheme" content="light dark">
 
   <link rel="icon" type="image/png" href="https://www.radiofrance.fr/dist/favicons/radiofrance/favicon.png">
@@ -670,7 +670,7 @@
 
     // change the page title too
     if (title.length > 0)
-      document.querySelector("title").innerHTML = authors + " - " + title;
+      document.querySelector("title").innerHTML = authors.length > 0 ? authors + " - " + title : title;
     else
       document.querySelector("title").innerHTML = radioName;
 

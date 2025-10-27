@@ -312,27 +312,7 @@
   let radiocode = 'fip';
   let titleInterval = null;
   let castInstance = null;
-
-  // Initialize Google Cast
-  window['__onGCastApiAvailable'] = function (isAvailable) {
-    if (isAvailable) {
-      // Add a small delay to ensure cast.framework is fully loaded
-      setTimeout(() => {
-        if (typeof cast !== 'undefined' && cast.framework) {
-          cast.framework.CastContext.getInstance().setOptions({
-            receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
-            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
-          });
-
-          castInstance = cast.framework.CastContext.getInstance();
-        } else {
-          console.error('Cast framework not available');
-        }
-      }, 100);
-    }
-  };
-
-  var hls;
+  let hls;
   const radios = new Map();
 
   radios.set('fip', { 'display': "Fip", 'apiId': "FIP", class: "fip" });
@@ -411,6 +391,8 @@
   }
 
   function playChromecastMusic() {
+    stopLocalMusic();
+
     if (radiocode == '')
       return;
 
@@ -459,8 +441,6 @@
         startLocalMusic();
     }
     else {
-      stopLocalMusic();
-
       if (isChromecastPlaying())
         pauseChromecastMusic();
       else
@@ -816,6 +796,33 @@
     
     startTitleInterval(30);
   };
+
+  // Initialize Google Cast
+  window['__onGCastApiAvailable'] = function (isAvailable) {
+    if (isAvailable) {
+      // Add a small delay to ensure cast.framework is fully loaded
+      setTimeout(() => {
+        if (typeof cast !== 'undefined' && cast.framework) {
+          cast.framework.CastContext.getInstance().setOptions({
+            receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+          });
+
+          castInstance = cast.framework.CastContext.getInstance();
+
+          playChromecastMusic();
+
+          setTimeout(() => {
+            if (isMusicPlaying())
+              showPauseButton();
+          }, 1000);          
+        } else {
+          console.error('Cast framework not available');
+        }
+      }, 100);
+    }
+  };
+
 </script>
 
 </html>

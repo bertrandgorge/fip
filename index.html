@@ -359,7 +359,7 @@
 
   function playMusic() {
     var castSession = castInstance?.getCurrentSession();
-    
+
     if (castSession == null)
       playLocalMusic();
     else
@@ -402,14 +402,18 @@
 
     var castSession = castInstance.getCurrentSession();
 
+    if (castSession == null)
+      return;
+
     var mediaInfo = new chrome.cast.media.MediaInfo(source, 'audio/aac');
     var request = new chrome.cast.media.LoadRequest(mediaInfo);
     castSession.loadMedia(request).then(
-      function() { 
-        console.log('Load succeed'); 
+      function() {
+        console.log('Load succeed');
+        startChromecastMusic();
       },
-      function(errorCode) { 
-        console.log('Error code: ' + errorCode); 
+      function(errorCode) {
+        console.log('Error code: ' + errorCode);
       });
   }
 
@@ -433,7 +437,7 @@
 
   function toggleMusic() {
     var castSession = castInstance?.getCurrentSession();
-    
+
     if (castSession == null){
       if (isLocalMusicPlaying())
         stopLocalMusic();
@@ -456,19 +460,22 @@
 
   function isChromecastPlaying() {
     var castSession = castInstance?.getCurrentSession();
-    
+
     if (castSession == null)
       return false;
 
-      let mediaStatus = castSession.getMediaSession();
+    let mediaStatus = castSession.getMediaSession();
 
-      console.log("Chromecast player state: " + mediaStatus);
-      return mediaStatus != null && mediaStatus.playerState === chrome.cast.media.PlayerState.PLAYING;
+    // update the volume button state
+    let volume = castSession.getVolume();
+    document.getElementById("son").value = volume * 100;
+
+    return mediaStatus != null && mediaStatus.playerState === chrome.cast.media.PlayerState.PLAYING;
   }
 
   function isMusicPlaying() {
     var castSession = castInstance?.getCurrentSession();
-    
+
     if (castSession == null)
       return isLocalMusicPlaying();
     else
@@ -492,7 +499,7 @@
 
   function muteClick() {
     var castSession = castInstance?.getCurrentSession();
-    
+
     if (castSession == null) {
       var player = document.getElementById("lecteur");
       player.muted = !player.muted;
@@ -506,7 +513,7 @@
 
   function updateMuteButton() {
     var castSession = castInstance?.getCurrentSession();
-    
+
     if (castSession == null) {
       var player = document.getElementById("lecteur");
 
@@ -538,7 +545,7 @@
 
   function setPlayerVolume(newVol = 1) {
     var castSession = castInstance?.getCurrentSession();
-    
+
     if (castSession == null) {
       var player = document.getElementById("lecteur");
       player.volume = newVol;
@@ -574,7 +581,7 @@
     }
 
     var ApiId = radios.get(radiocode).apiId;
-    if (ApiId == '') {
+    if (ApiId == '' || ApiId == 'FRANCEMUSIQUE_CLASSIQUE_LOVE') {
       return;
     }
 
@@ -706,7 +713,7 @@
 
   function pauseChromecastMusic() {
     var castSession = castInstance?.getCurrentSession();
-    
+
     if (castSession == null)
       return;
     let mediaStatus = castSession.getMediaSession();
@@ -722,7 +729,7 @@
 
   function startChromecastMusic() {
     var castSession = castInstance?.getCurrentSession();
-    
+
     if (castSession == null)
       return;
 
@@ -731,9 +738,9 @@
       playChromecastMusic();
       return;
     }
-      
+
     mediaStatus.play(null, function () {
-      console.log('Playing'); 
+      console.log('Playing');
     });
 
     showPauseButton();
@@ -793,7 +800,7 @@
       if (isMusicPlaying())
         showPauseButton();
     }, 1000);
-    
+
     startTitleInterval(30);
   };
 
@@ -803,19 +810,57 @@
       // Add a small delay to ensure cast.framework is fully loaded
       setTimeout(() => {
         if (typeof cast !== 'undefined' && cast.framework) {
-          cast.framework.CastContext.getInstance().setOptions({
+          castInstance = cast.framework.CastContext.getInstance();
+
+          castInstance.setOptions({
             receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
             autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
           });
 
-          castInstance = cast.framework.CastContext.getInstance();
+          castInstance.addEventListener(
+            cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
+            function (event) {
+              console.log("Cast session state changed: " + event.sessionState);
+              switch (event.sessionState) {
+                case cast.framework.SessionState.SESSION_RESUMED:
+                  // Try to get the current media and set the radio accordingly
+                  var castSession = castInstance.getCurrentSession();
+                  if (castSession != null) {
+                    var mediaStatus = castSession.getMediaSession();
+                    if (mediaStatus != null) {
+                      var mediaInfo = mediaStatus.media;
+                      var mediaUrl = mediaInfo.contentId;
 
-          playChromecastMusic();
+                      // Determine the radio code from the media URL
+                      radios.forEach((value, key) => {
+                        var expectedUrl = "https://icecast.radiofrance.fr/" + key + "-hifi.aac";
+                        if (mediaUrl === expectedUrl) {
+                          changeRadio(key);
+                        }
+                      });
+                    }
+                  }
 
-          setTimeout(() => {
-            if (isMusicPlaying())
-              showPauseButton();
-          }, 1000);          
+                  break;
+
+                case cast.framework.SessionState.SESSION_STARTED:
+                  // Start casting
+                  playChromecastMusic();
+
+                  setTimeout(() => {
+                    if (isMusicPlaying())
+                      showPauseButton();
+                  }, 1000);
+
+                  break;
+
+                case cast.framework.SessionState.SESSION_ENDED:
+                  // Stop casting
+                  showPlayButton();
+
+                  break;
+              }
+            });
         } else {
           console.error('Cast framework not available');
         }
@@ -823,6 +868,49 @@
     }
   };
 
+// logFranceMusiqueWebRadios();
+
+function logFranceMusiqueWebRadios() {
+
+    $.ajax({
+      url: "https://openapi.radiofrance.fr/v1/graphql?x-token=92e33e3e-f6dd-49c7-a8cb-efdbce104fbe",
+      method: 'POST',
+      dataType: "json",
+      contentType: "application/json",
+      data: JSON.stringify({
+        query: `{
+          brand(id: FRANCEMUSIQUE) {
+            id
+            title
+            baseline
+            description
+            websiteUrl
+            playerUrl
+            liveStream
+            localRadios {
+              id
+              title
+              description
+              playerUrl
+              liveStream
+            }
+            webRadios {
+              id
+              title
+              description
+              playerUrl
+              liveStream
+            }
+          }
+        }`}),
+      success: function (result) {
+        console.log(result);
+      }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+
+    });
+
+}
 </script>
 
 </html>

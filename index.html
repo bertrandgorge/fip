@@ -543,16 +543,21 @@
     }
   }
 
-  function setPlayerVolume(newVol = 1) {
+  function adjustVolume(delta) {
     var castSession = castInstance?.getCurrentSession();
+    var currentVolume;
 
-    if (castSession == null) {
-      var player = document.getElementById("lecteur");
-      player.volume = newVol;
-    }
-    else {
-      castSession.setVolume(newVol);
-    }
+    if (castSession == null)
+      return;
+
+    currentVolume = castSession.getVolume();
+
+    var newVolume = Math.max(0, Math.min(1, currentVolume + delta));
+    castSession.setVolume(newVolume);
+
+    // Update the UI slider
+    document.getElementById("son").value = newVolume * 100;
+    updateMuteButton();
   }
 
   function startTitleInterval(time, bForce = false) {
@@ -768,6 +773,17 @@
   });
   navigator.mediaSession.setActionHandler('play', function () {
     toggleMusic();
+  });
+
+  // Handle volume keys via keydown events
+  document.addEventListener('keydown', function(ev) {
+    if (ev.code === 'AudioVolumeDown') {
+      ev.preventDefault();
+      adjustVolume(-0.05); // Decrease volume by 5%
+    } else if (ev.code === 'AudioVolumeUp') {
+      ev.preventDefault();
+      adjustVolume(0.05); // Increase volume by 5%
+    }
   });
 
   window.onload = function () {
